@@ -1,0 +1,96 @@
+# EchoHeart Stage 1 overrides for ssl_default_config.yaml.
+dino:
+  head_bottleneck_dim: 512
+  head_hidden_dim: 8192
+ibot:
+  head_n_prototypes: 98304
+  head_bottleneck_dim: 384
+  head_hidden_dim: 4096
+train:
+  batch_size_per_gpu: 256
+  image_root: ./data/images
+  seg_root: ./data/masks
+  OFFICIAL_EPOCH_LENGTH: 1000
+  cache_dataset: true
+  checkpointing: true
+student:
+  arch: vit_small
+  drop_path_rate: 0.4
+  ffn_layer: mlp
+  ffn_ratio: 4
+  qkv_bias: true
+  norm_layer: layernormbf16
+  n_storage_tokens: 4
+  untie_global_and_local_cls_norm: false
+  mask_k_bias: true
+  pos_embed_rope_rescale_coords: 2
+  pos_embed_rope_dtype: fp32
+  fp8_filter: none
+teacher:
+  momentum_teacher: null
+  final_momentum_teacher: null
+  warmup_teacher_temp: null
+  teacher_temp: null
+  warmup_teacher_temp_epochs: null
+optim:
+  epochs: 1000
+  weight_decay: null
+  weight_decay_end: null
+  lr: null
+  warmup_epochs: null
+  min_lr: null
+  schedule_trunc_extra: null
+  clip_grad: 30.0
+  freeze_last_layer_epochs: null
+  layerwise_decay: 0.98
+  adamw_beta2: 0.99
+crops:
+  local_crops_size: 98
+data:
+  crop_strategy: standard
+  sector_mask_path: ./data/sector_mask.png
+  use_seg: true
+  global_crops_scale:
+  - 0.5
+  - 1.0
+seg_aug:
+  class_whitelist: null
+  ignore_ids:
+  - 0
+  min_class_pixels: 64
+  margin: 0.1
+mask_guidance:
+  enabled: true
+  mask_region: foreground
+  class_ids: null
+  ignore_ids:
+  - 0
+  min_coverage: 0.0
+  boundary_width: 1
+  require_seg: false
+  policy_path: null
+checkpointing:
+  period: 1000
+  keep_every: 50000
+schedules:
+  lr:
+    start: 0
+    peak: 5.0e-05
+    end: 5.0e-05
+    warmup_epochs: 100
+    freeze_last_layer_epochs: 5
+  weight_decay:
+    start: 0.04
+    peak: 0.04
+    end: 0.04
+    warmup_epochs: 0
+  teacher_temp:
+    start: 0.04
+    peak: 0.07
+    end: 0.07
+    warmup_epochs: 100
+  momentum:
+    start: 0.994
+    peak: 0.994
+    end: 0.994
+    warmup_epochs: 0

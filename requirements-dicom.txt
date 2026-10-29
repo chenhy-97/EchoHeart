@@ -1,0 +1,4 @@
+-r requirements.txt
+pylibjpeg>=2,<3
+pylibjpeg-libjpeg>=2,<3
+pylibjpeg-openjpeg>=2,<3
